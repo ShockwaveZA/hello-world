@@ -11,6 +11,13 @@ CREATE DATABASE prac2
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1;
 
+CREATE TABLE DegreeProgram (
+    dCode varchar(255) PRIMARY KEY,
+    dName varchar(255),
+    dYears int,
+    dFaculty varchar(255)
+);
+
 CREATE TABLE Undergraduate (
    	uNumber varchar(6) PRIMARY KEY,
     uFullNames varchar(255),
@@ -31,13 +38,6 @@ CREATE TABLE Postgraduate (
     pCategory varchar(255),
     pSupervisor varchar(255),
     FOREIGN KEY (pDegreeCode) REFERENCES DegreeProgram(dCode)
-);
-
-CREATE TABLE DegreeProgram (
-    dCode varchar(255) PRIMARY KEY,
-    dName varchar(255),
-    dYears int,
-    dFaculty varchar(255)
 );
     
 CREATE TABLE Course (
