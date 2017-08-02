@@ -14,7 +14,7 @@ CREATE DATABASE prac2
 CREATE TABLE Undergraduate (
    	uNumber varchar(6) PRIMARY KEY,
     uFullNames varchar(255),
-    uDateOfBirth date,
+    uDateOfBirth varchar(255),
     uDegreeCode varchar(255),
     uYearOfStudy int,
     uCourseRegistration varchar(255),
@@ -25,7 +25,7 @@ CREATE TABLE Undergraduate (
 CREATE TABLE Postgraduate (
     pNumber varchar(6) PRIMARY KEY,
     pFullNames varchar(255),
-    pDateOfBirth date,
+    pDateOfBirth varchar(255),
     pDegreeCode varchar(255),
     pYearOfStudy int,
     pCategory varchar(255),
