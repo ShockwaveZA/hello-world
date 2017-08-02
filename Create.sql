@@ -16,7 +16,8 @@ CREATE TABLE Student (
     sFullNames varchar(255),
     sDateOfBirth date,
     sDegreeCode varchar(255),
-    sYearOfStudy int
+    sYearOfStudy int,
+    FOREIGN KEY (sDegreeCode) REFERENCES DegreeProgram(dCode)
 );
 
 CREATE TABLE Undergraduate (
