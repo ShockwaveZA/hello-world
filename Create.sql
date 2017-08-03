@@ -47,6 +47,68 @@ CREATE TABLE Course (
     cCredits int
 );
 
+CREATE FUNCTION ageInYears(dob TEXT)
+RETURNS integer
+AS 
+BEGIN
+    DECLARE ret integer;
+    SET ret = FLOOR(DATEDIFF(DAY, TO_DATE(dob, 'dd-mm-yyyy'), GETDATE() / 365.25);
+   	RETURN (ret);
+END;
+                   
+CREATE FUNCTION isRegisteredFor(underNumber varchar(6), courseCode varchar(6))
+RETURNS BOOLEAN
+AS
+BEGIN
+    RETURN EXISTS (
+        SELECT *
+        FROM undergraduate
+        WHERE uNumber = underNumber AND CONTAINS(uCourseRegistration, courseCode)
+    );
+END;
+                    
+CREATE FUNCTION isFinalYearStudent(underNumber varchar(6))
+RETURNS BOOLEAN
+AS
+BEGIN
+    RETURN EXISTS (
+        SELECT *
+        FROM undergraduate, degreeprogram
+        WHERE undergraduate.uDegreeCode = degreeprogram.dCode 
+            AND undergraduate.uNumber = underNumber 
+            AND undergraduate.uYearOfStudy = degreeprogram.dYears
+    );
+END;
+                    
+CREATE FUNCTION isFullTime(postNumber varchar(6))
+RETURNS BOOLEAN
+AS
+BEGIN
+  RETURN EXISTS (
+    SELECT *
+    FROM Postgraduate
+    WHERE pNumber = postNumber AND pCategory = 'full time'
+        );
+END;
+
+CREATE FUNCTION isPartTime(postNumber varchar(6))
+RETURNS BOOLEAN
+AS
+BEGIN
+  RETURN EXISTS (
+    SELECT *
+    FROM Postgraduate
+    WHERE pNumber = postNumber AND pCategory = 'part time'
+        );
+END;
+
+CREATE SEQUENCE Counter
+START WITH 1
+INCREMENT BY 1
+GO
+
+-- ================================================================= INSERTS
+
 INSERT INTO DegreeProgram VALUES
     ('BSc', 'Bachelor of Science', 3, 'EBIT'),
     ('BIT', 'Bachelor of IT', 4, 'EBIT'),
@@ -67,27 +129,3 @@ INSERT INTO Undergraduate VALUES
 INSERT INTO Postgraduate VALUES
     ('101122', 'Mr Tristan Bowman', '15-06-1987', 'PhD', 2, 'full time', 'Mr Emilio Singh'),
     ('121101', 'Mr Jason van Eck', '27-04-1985', 'PhD', 3, 'part time', 'Mr Emilio Singh');
-
-
-
-CREATE FUNCTION isFullTime(@postNumber varchar(6))
-RETURNS BOOLEAN
-AS
-BEGIN
-  RETURN EXISTS (
-    SELECT *
-    FROM Postgraduate
-    WHERE pNumber = @postNumber AND pCategory = 'full time'
-        );
-END
-
-CREATE FUNCTION isPartTime(@postNumber varchar(6))
-RETURNS BOOLEAN
-AS
-BEGIN
-  RETURN EXISTS (
-    SELECT *
-    FROM Postgraduate
-    WHERE pNumber = @postNumber AND pCategory = 'part time'
-        );
-END
