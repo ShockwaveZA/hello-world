@@ -67,3 +67,27 @@ INSERT INTO Undergraduate VALUES
 INSERT INTO Postgraduate VALUES
     ('101122', 'Mr Tristan Bowman', '15-06-1987', 'PhD', 2, 'full time', 'Mr Emilio Singh'),
     ('121101', 'Mr Jason van Eck', '27-04-1985', 'PhD', 3, 'part time', 'Mr Emilio Singh');
+
+
+
+CREATE FUNCTION isFullTime(@postNumber varchar(6))
+RETURNS BOOLEAN
+AS
+BEGIN
+  RETURN EXISTS (
+    SELECT *
+    FROM Postgraduate
+    WHERE pNumber = @postNumber AND pCategory = 'full time'
+        );
+END
+
+CREATE FUNCTION isPartTime(@postNumber varchar(6))
+RETURNS BOOLEAN
+AS
+BEGIN
+  RETURN EXISTS (
+    SELECT *
+    FROM Postgraduate
+    WHERE pNumber = @postNumber AND pCategory = 'part time'
+        );
+END
