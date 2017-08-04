@@ -47,14 +47,16 @@ CREATE TABLE Course (
     cCredits int
 );
 
-CREATE FUNCTION ageInYears(dob TEXT)
-RETURNS integer
-AS 
+CREATE OR REPLACE FUNCTION ageInYears(dob TEXT)
+RETURNS double precision
+AS $$
+    DECLARE ret double precision;
 BEGIN
-    DECLARE ret integer;
-    SET ret = FLOOR(DATEDIFF(DAY, TO_DATE(dob, 'dd-mm-yyyy'), GETDATE() / 365.25);
+	SELECT FLOOR(DATE_PART('day', now()::date - dob::date)) AS age INTO ret;
+    -- SET ret= FLOOR(DATEDIFF(DAY, TO_DATE(dob, 'dd-mm-yyyy'), GETDATE() / 365.25));
    	RETURN (ret);
 END;
+$$ LANGUAGE plpgsql;
                    
 CREATE FUNCTION isRegisteredFor(underNumber varchar(6), courseCode varchar(6))
 RETURNS BOOLEAN
