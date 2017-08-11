@@ -31,11 +31,20 @@ CREATE TABLE Uni.Undergraduate (
     uCourseRegistration varchar(255)
 ) INHERITS(Uni.Student);
 
+CREATE TABLE Uni.DeletedUndergrad (
+	deletionTime date,
+	deleter int
+) INHERITS(Uni.Undergraduate);
 
 CREATE TABLE Uni.Postgraduate (
     pCategory varchar(255),
     pSupervisor varchar(255)
 ) INHERITS(Uni.Student);
+
+CREATE TABLE Uni.DeletedPostgrad (
+	deletionTime date,
+	deleter int
+) INHERITS(Uni.Postgraduate);
     
 CREATE TABLE Uni.Course (
 	cID int PRIMARY KEY,
