@@ -1,9 +1,9 @@
-CREATE DATABASE objects
+CREATE DATABASE studentsDBprac3
     WITH 
     OWNER = postgres
     ENCODING = 'UTF8'
-    LC_COLLATE = 'English_United States.1252'
-    LC_CTYPE = 'English_United States.1252'
+    LC_COLLATE = 'English_South Africa.1252'
+    LC_CTYPE = 'English_South Africa.1252'
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1;
 
@@ -11,7 +11,7 @@ CREATE SCHEMA Uni;
 	
 CREATE TABLE Uni.DegreeProgram (
 	dID int PRIMARY KEY,
-    dCode varchar(255),
+    dCode varchar(255) UNIQUE,
     dName varchar(255),
     dYears int,
     dFaculty varchar(255)
@@ -24,7 +24,7 @@ CREATE TABLE Uni.Student (
 	sDateOfBirth varchar(255),
 	sDegreeCode varchar(255),
 	sYearOfStudy int,
-    FOREIGN KEY (uDegreeCode) REFERENCES DegreeProgram(dCode)
+    FOREIGN KEY (sDegreeCode) REFERENCES Uni.DegreeProgram(dCode)
 );
 
 CREATE TABLE Uni.Undergraduate (
@@ -162,7 +162,7 @@ BEGIN
     
     LOOP
     EXIT WHEN position(',' in str) = 0 OR ret = true;
-    ret := uni.coursecodefrequency(substring(str from 1 for 6)) > 1;
+    ret := uni.coursecodefrequency(substring(str from 1 for 6), courseregistration) > 1;
     str := substring(str from 8 for char_length(str));
     END LOOP;
     
@@ -171,7 +171,7 @@ BEGIN
     END IF;
     
     IF (char_length(str) = 6) THEN
-    ret := uni.coursecodefrequency(str) > 1;
+    ret := uni.coursecodefrequency(str, courseregistration) > 1;
     END IF;
     
     RETURN ret;
@@ -215,3 +215,48 @@ BEGIN
         );
 END;
 $$ LANGUAGE plpgsql;
+
+-- ================================================= TRIGGERS
+
+CREATE OR REPLACE FUNCTION check_valid_degree_code()
+RETURNS TRIGGER
+AS $$
+BEGIN
+	IF (uni.hasValidCourseCodes(NEW.sDegreeCode)) THEN ELSE
+		RAISE EXCEPTION 'Degree code not valid';
+	END IF;
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION check_valid_course_codes()
+RETURNS TRIGGER
+AS $$
+BEGIN
+	IF (uni.isValidDegreeCode(NEW.uCourseRegistration)) THEN ELSE
+		RAISE EXCEPTION 'Course registration not valid';
+	END IF;
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER check_valid_degree
+	BEFORE INSERT OR UPDATE ON uni.student
+	FOR EACH ROW
+	EXECUTE PROCEDURE check_valid_degree_code();
+	
+CREATE TRIGGER check_valid_degree
+	BEFORE INSERT OR UPDATE ON uni.undergraduate
+	FOR EACH ROW
+	EXECUTE PROCEDURE check_valid_degree_code();
+	
+CREATE TRIGGER check_valid_degree
+	BEFORE INSERT OR UPDATE ON uni.postgraduate
+	FOR EACH ROW
+	EXECUTE PROCEDURE check_valid_degree_code();
+	
+CREATE TRIGGER check_valid_course_registration
+	BEFORE INSERT OR UPDATE ON uni.undergraduate
+	FOR EACH ROW
+	EXECUTE PROCEDURE check_valid_course_codes();
