@@ -1,0 +1,81 @@
+-- Question 1
+
+for $artist in doc('Musicians.xml')//musicians/musician 
+let $name := $artist/name 
+return element artist { string($name) }
+
+
+
+-- Question 2
+
+for $album in doc('Musicians.xml')//musicians/musician[name="Justin Bergh"]/albums/album
+let $year := string($album/@year)
+return element album { concat(string($album), ", ", $year) }
+
+
+
+-- Question 3
+
+for $artist in doc('Musicians.xml')//musicians/musician[albums/album="Lateralus"]
+let $name := $artist/name
+return element artist { string($name) }
+
+
+
+-- Question 4
+
+for $artist in doc('Musicians.xml')//musicians/musician[contains(genre, "Pop")]
+let $name := $artist/name
+return element artist { string($name) }
+
+
+
+-- Question 5
+
+for $artist in doc('Musicians.xml')//musicians/musician[@type="solo"]
+let $name := $artist/name
+return element artist { string($name) }
+
+
+
+-- Question 6
+
+for $artist in doc('Musicians.xml')//musicians/musician[@type="solo"][position() = 2]
+let $name := $artist/name
+let $genre := $artist/genre
+return element artist { concat($name, ", ", $genre) }
+
+
+
+-- Question 7
+
+let $artist := doc('Musicians.xml')//musicians/musician[name="Ben Folds"]
+let $album := $artist/albums/album[position()=4]
+return element album { string($album) }
+
+
+
+-- Question 8
+
+for $album in doc('Musicians.xml')//musicians/musician/albums/album[@year>=2008]
+return element album { string($album) }
+
+
+
+-- Question 9
+
+for $artist in doc('Musicians.xml')//musicians/musician
+let $name := $artist/name
+let $count := count($artist/albums/album)
+let $max := max($artist/albums/album/@year)
+let $min := min($artist/albums/album/@year)
+let $rate := (($max - $min + 1) div $count)
+order by $rate descending
+return <artist><name>{string($name)}</name><rate>{$rate}</rate></artist>
+
+
+
+-- Question 10
+let $artist := avg(count(doc('Musicians.xml')//musicians/musician[@type="band"]/members/member) div count(doc('Musicians.xml')//musicians/musician[@type="band"]))
+return element averageMembersPerBand {$artist}
+
