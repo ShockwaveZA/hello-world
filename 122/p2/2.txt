@@ -1,0 +1,26 @@
+Task 2(a)
+
+(a) POSIX (Portable Operating System Interface is a family of standards specified by the IEEE Computer Society for maintaining compatibility between operating systems.
+
+(b) There were many versions of UNIX that were existing so there was a need to develop standards so that communication or portability between these systems were made easier and convenient.
+
+(c)
+Operating Systems where POSIX is available:
+- Solaris
+- Integrity
+- UnixWare
+- macOS (Since 10.5 Leopard)
+
+Languages with access to POSIX:
+- C
+- C++
+- Ada 95
+- Java (not with standard, but accessible with a library)
+
+
+
+Task 2(b)
+
+(a) Processes and threads are both independant sequences of execution, but the difference is that threads will run in a shared memory space of the main program while a process will run in a separate memory space.
+
+(b) Threads will not receive as much resources as a process would, as it runs in the same memory space, but they do take less time to start and terminate their execution. Processes have an advantage of having their own allocated resources and their own memory space, but it takes the operating system longer to allocate these resources to a process.
