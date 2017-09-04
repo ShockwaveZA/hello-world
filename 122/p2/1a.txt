@@ -1,0 +1,12 @@
+(a)
+pgrep scite
+
+(b)
+kill -9 #
+# = pid
+
+(c)
+ps -ef | grep <username>
+
+(d)
+pkill -u <userid>
