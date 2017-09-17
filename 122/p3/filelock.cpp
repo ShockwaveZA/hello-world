@@ -1,5 +1,6 @@
 #include <iostream>
 #include <unistd.h>
+#include <sys/file.h>
 
 #include <string>
 #include <fstream>
@@ -9,7 +10,7 @@
 
 using namespace std;
 
-mutex m;
+int fd;
 
 void writeToFile(int threadNumber)
 {
@@ -23,12 +24,12 @@ void writeToFile(int threadNumber)
 
 void lock()
 {
-	m.lock();
+	flock(fd, LOCK_EX);
 }
 
 void unlock()
 {
-	m.unlock();
+	flock(fd, LOCK_UN);
 }
 
 void threadFunction(int threadNumber)
@@ -56,7 +57,7 @@ void caller(int threadNumber) {
 		threadFunction(threadNumber);
 	}
 	catch (...) {
-		m.unlock();
+		unlock();
 		cout << "Handled it!!" << endl;
 	}
 }
@@ -64,6 +65,8 @@ void caller(int threadNumber) {
 int main(int argc, char const *argv[]) {
 	int n = atoi(argv[1]);
 	thread t[n];
+
+	fd = open("filelock.txt", O_WRONLY);
 
 	ofstream f;
 	f.open("filelock.txt");
@@ -74,6 +77,8 @@ int main(int argc, char const *argv[]) {
 		t[k] = thread(caller, k + 1);
 		t[k].join();
 	}
+
+	close(fd);
 
 	return 0;
 }
