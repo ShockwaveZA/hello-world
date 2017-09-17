@@ -51,6 +51,7 @@ void threadFunction(int threadNumber)
 }
 
 void caller(int threadNumber) {
+	cout << "Created Thread: " << this_thread::get_id() << endl;
 	try {
 		threadFunction(threadNumber);
 	}
@@ -63,10 +64,13 @@ void caller(int threadNumber) {
 int main(int argc, char const *argv[]) {
 	int n = atoi(argv[1]);
 	thread t[n];
-	system("rm mutex.txt");
+
+	ofstream f;
+	f.open("filelock.txt");
+	f << "";
+	f.close();
 	
 	for (int k = 0; k < n; k++) {
-		cout << "Created Thread: " << k + 1 << endl;
 		t[k] = thread(caller, k + 1);
 		t[k].join();
 	}
