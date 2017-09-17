@@ -14,7 +14,7 @@ mutex m;
 void writeToFile(int threadNumber)
 {
 	ofstream f;
-	f.open("mutex.txt", ofstream::app);
+	f.open("filelock.txt", ofstream::app);
 	for (int k = 1; k <= 10; k++)
 		f << threadNumber * k << " ";
 	f << "\n";
