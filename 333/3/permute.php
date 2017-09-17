@@ -1,63 +1,67 @@
-<?php
+global $argv;
+$arr = array();
 
-	global $argv;
-	$arr = array();
+for ($k = 1; $k < count($argv); $k++)
+	array_push($arr, $argv[$k]);
 
-	for ($k = 1; $k < count($argv); $k++)
-		array_push($arr, $argv[$k]);
+$arr = array(1, 2, 3, 4);
 
-	$permuted = false;
-	$perm = array();
+$permuted = false;
+$perm = array();
+    
+generatePermutations($arr);
 
-	function generatePermutations($arr) {
-		$out = array();
-		$permuted = true;
+function generatePermutations($arr) {
+	$out = array();
+	$permuted = true;
 
-		recursion($arr, $out);
-		modifyPermutations($perm);
+	global $perm;
+        
+	recursion($arr, $out);
+	modifyPermutations($perm);
 
-		for ($k = 0; $k < count($perm); $k++) {
-			for ($j = 0; $j < count($perm[$k]); $j++) {
-				if ($j > 0)
-					echo " ";
-				echo $perm[$k][$j];
-			}
-			echo "<br>";
+	for ($k = 0; $k < count($perm); $k++) {
+		for ($j = 0; $j < count($perm[$k]); $j++) {
+			if ($j > 0)
+				echo " ";
+			echo $perm[$k][$j];
 		}
+		echo "<br>";
+	}
+}
+
+function recursion($arr, $out) {
+	if (count($arr) == 1) {
+		$newOut = array();
+		for ($k = 0; $k < count($out); $k++)
+			array_push($newOut, $out[$k]);
+		array_push($newOut, $arr[0]);
+
+		global $perm;
+
+		array_push($perm, $newOut);
+		return;
 	}
 
-	function recursion($arr, $out) {
-		if (count($arr) == 1) {
-			$newOut = array();
-			for ($k = 0; $k < count($out); $k++)
-				array_push($newOut, $out[$k]);
-			array_push($newOut, $arr[0]);
+	for ($k = 0; $k < count($arr); $k++) {
+		$newArr = array();
 
-			array_push($perm, $newOut)
-			return;
+		for ($j = 0; $j < count($arr); $j++) {
+			if ($j != $k)
+				array_push($newArr, $arr[$j]);
 		}
 
-		for ($k = 0; $k < count($arr); $k++) {
-			$newArr = array();
+		$newOut = array();
+		for ($j = 0; $j < count($out); $j++)
+			array_push($newOut, $out[$j]);
+		array_push($newOut, $arr[$k]);
 
-			for ($j = 0; $j < count($arr); $j++) {
-				if ($j != $k)
-					array_push($newArr, $arr[$j]);
-			}
-
-			$newOut = array();
-			for ($j = 0; $j < count($out); $j++)
-				array_push($newOut, $out[$j]);
-			array_push($newOut, $arr[$k]);
-
-			recursion($newArr, $newOut);
-		}
+		recursion($newArr, $newOut);
 	}
+}
 
-	function modifyPermutations($arr) {
-		for ($k = 0; $k < count($arr); $k++)
-			for ($j = 0; $j < count($arr[$k]); $j++)
-				$arr[$k][$j] = $arr[$k][$j] * $arr[$k][$j];
-	}
-
-?>
+function modifyPermutations($arr) {
+	for ($k = 0; $k < count($arr); $k++)
+		for ($j = 0; $j < count($arr[$k]); $j++)
+			$arr[$k][$j] = $arr[$k][$j] * $arr[$k][$j];
+}
