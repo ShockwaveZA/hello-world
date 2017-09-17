@@ -5,6 +5,7 @@
 #include <fstream>
 #include <thread>
 #include <mutex>
+#include <cstdlib>
 
 using namespace std;
 
@@ -62,6 +63,7 @@ void caller(int threadNumber) {
 int main(int argc, char const *argv[]) {
 	int n = atoi(argv[1]);
 	thread t[n];
+	system("rm mutex.txt");
 	
 	for (int k = 0; k < n; k++) {
 		cout << "Created Thread: " << k + 1 << endl;
