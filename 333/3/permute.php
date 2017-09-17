@@ -1,10 +1,10 @@
+<?php
+
 global $argv;
 $arr = array();
 
 for ($k = 1; $k < count($argv); $k++)
 	array_push($arr, $argv[$k]);
-
-$arr = array(1, 2, 3, 4);
 
 $permuted = false;
 $perm = array();
@@ -20,6 +20,7 @@ function generatePermutations($arr) {
 	recursion($arr, $out);
 	modifyPermutations($perm);
 
+	ob_start();
 	for ($k = 0; $k < count($perm); $k++) {
 		for ($j = 0; $j < count($perm[$k]); $j++) {
 			if ($j > 0)
@@ -28,6 +29,8 @@ function generatePermutations($arr) {
 		}
 		echo "<br>";
 	}
+	file_put_contents('permutations.html', ob_get_contents());
+	ob_end_flush();
 }
 
 function recursion($arr, $out) {
@@ -60,8 +63,10 @@ function recursion($arr, $out) {
 	}
 }
 
-function modifyPermutations($arr) {
+function modifyPermutations(&$arr) {
 	for ($k = 0; $k < count($arr); $k++)
 		for ($j = 0; $j < count($arr[$k]); $j++)
-			$arr[$k][$j] = $arr[$k][$j] * $arr[$k][$j];
+			$arr[$k][$j] *= $arr[$k][$j];
 }
+
+?>
