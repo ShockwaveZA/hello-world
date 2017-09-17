@@ -67,12 +67,7 @@ int main(int argc, char const *argv[]) {
 	
 	for (int k = 0; k < n; k++) {
 		cout << "Created Thread: " << k + 1 << endl;
-		try {
-			t[k] = thread(caller, k + 1);
-		} catch (...) {
-			m.unlock();
-			cout << "Handled it!!" << endl;
-		}
+		t[k] = thread(caller, k + 1);
 	}
 
 	for (int k = 0; k < n; k++)
