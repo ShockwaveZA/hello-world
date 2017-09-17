@@ -27,6 +27,7 @@ def permute(arr, out):
 def modifyPermutations(arr):
 	for k in range(0, len(arr)):
 		arr[k] = arr[k] ** 2
+	return arr
 
 def picklePermutations(perms, fname = 'permutations.pkl'):
 	with open(fname, 'wb') as f:
@@ -51,7 +52,6 @@ args = []
 for k in range(1, len(sys.argv)):
 	args.append(int(sys.argv[k]))
 	
-args = [3, 4, 5]
 yn = input('Read previous permutations? (y/n): ')
 if (yn == 'y'):
 	perms = []
@@ -68,5 +68,4 @@ else:
 	else:
 		perms = generatePermutations(args)
 	printList(perms, len(args))
-	picklePermutations(perms)
-	
+picklePermutations(perms)
