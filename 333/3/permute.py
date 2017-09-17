@@ -56,16 +56,18 @@ yn = input('Read previous permutations? (y/n): ')
 if (yn == 'y'):
 	perms = []
 	fname = input('file name: ')
+	l = int(input('length: '))
 	if (fname == ''):
 		perms = getPickledPermutations()
 	else:
 		perms = getPickledPermutations(fname)
-	printList(modifyPermutations(perms), len(args))
+	printList(modifyPermutations(perms), l)
 else:
 	perms = []
 	if (args == []):
 		perms = generatePermutations()
+		printList(perms, 3)
 	else:
 		perms = generatePermutations(args)
-	printList(perms, len(args))
+		printList(perms, len(args))
 picklePermutations(perms)
